@@ -108,7 +108,7 @@ class SolverWrapper(object):
       var_to_shape_map = reader.get_variable_to_shape_map()
       return var_to_shape_map 
     except Exception as e:  # pylint: disable=broad-except
-      print(str(e))
+      #print(str(e))
       if "corrupted compressed block contents" in str(e):
         print("It's likely that your checkpoint file has been compressed "
               "with SNAPPY.")
@@ -276,7 +276,6 @@ class SolverWrapper(object):
       timer.tic()
       # Get training data, one batch at a time
       blobs = self.data_layer.forward()
-
       now = time.time()
       if iter == 1 or now - last_summary_time > cfg.TRAIN.SUMMARY_INTERVAL:
         # Compute the graph with summary
@@ -342,7 +341,11 @@ def filter_roidb(roidb):
     # Valid images have:
     #   (1) At least one foreground RoI OR
     #   (2) At least one background RoI
-    overlaps = entry['max_overlaps']
+    try:
+      overlaps = entry['max_overlaps']
+    except:
+      print(entry)
+      return False
     # find boxes with sufficient overlap
     fg_inds = np.where(overlaps >= cfg.TRAIN.FG_THRESH)[0]
     # Select background RoIs as those within [BG_THRESH_LO, BG_THRESH_HI)
@@ -353,6 +356,7 @@ def filter_roidb(roidb):
     return valid
 
   num = len(roidb)
+  print(num)
   filtered_roidb = [entry for entry in roidb if is_valid(entry)]
   num_after = len(filtered_roidb)
   print('Filtered {} roidb entries: {} -> {}'.format(num - num_after,

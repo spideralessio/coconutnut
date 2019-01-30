@@ -19,7 +19,7 @@ case ${DATASET} in
     TRAIN_IMDB="voc_2007_trainval"
     TEST_IMDB="voc_2007_test"
     STEPSIZE="[50000]"
-    ITERS=70000
+    ITERS=4000
     ANCHORS="[8,16,32]"
     RATIOS="[0.5,1,2]"
     ;;
@@ -36,6 +36,14 @@ case ${DATASET} in
     TEST_IMDB="coco_2014_minival"
     STEPSIZE="[350000]"
     ITERS=490000
+    ANCHORS="[4,8,16,32]"
+    RATIOS="[0.5,1,2]"
+    ;;
+  coco2017)
+    TRAIN_IMDB="coco_2017_train"
+    TEST_IMDB="coco_2017_val"
+    STEPSIZE="[350000]"
+    ITERS=100000
     ANCHORS="[4,8,16,32]"
     RATIOS="[0.5,1,2]"
     ;;
@@ -81,5 +89,6 @@ if [ ! -f ${NET_FINAL}.index ]; then
       TRAIN.STEPSIZE ${STEPSIZE} ${EXTRA_ARGS}
   fi
 fi
+
 
 ./experiments/scripts/test_faster_rcnn.sh $@

@@ -30,16 +30,22 @@ import argparse
 from nets.vgg16 import vgg16
 from nets.resnet_v1 import resnetv1
 
-CLASSES = ('__background__',
-           'aeroplane', 'bicycle', 'bird', 'boat',
-           'bottle', 'bus', 'car', 'cat', 'chair',
-           'cow', 'diningtable', 'dog', 'horse',
-           'motorbike', 'person', 'pottedplant',
-           'sheep', 'sofa', 'train', 'tvmonitor')
 CLASSES = ('__background__',  # always index 0
-"airplane", "apple", "backpack", "banana", "baseball bat", "baseball glove", "bear", "bed", "bench", "bicycle", "bird", "boat", "book", "bottle", "bowl", "broccoli", "bus", "cake", "car", "carrot", "cat", "cell phone", "chair", "clock", "couch", "cow", "cup", "dining table", "dog", "donut", "elephant", "fire hydrant", "fork", "frisbee", "giraffe", "hair drier", "handbag", "horse", "hot dog", "keyboard", "kite", "knife", "laptop", "microwave", "motorcycle", "mouse", "orange", "oven", "parking meter", "person", "pizza", "potted plant", "refrigerator", "remote", "sandwich", "scissors", "sheep", "sink", "skateboard", "skis", "snowboard", "spoon", "sports ball", "stop sign", "suitcase", "surfboard", "teddy bear", "tennis racket", "tie", "toaster", "toilet", "toothbrush", "traffic light", "train", "truck", "tv", "umbrella", "vase", "wine glass", "zebra")
+'person', 'bicycle', 'car', 'motorcycle', 'airplane', 'bus', 
+'train', 'truck', 'boat', 'traffic light', 'fire hydrant',
+ 'stop sign', 'parking meter', 'bench', 'bird', 'cat', 'dog', 'horse',
+  'sheep', 'cow', 'elephant', 'bear', 'zebra', 'giraffe', 'backpack',
+   'umbrella', 'handbag', 'tie', 'suitcase', 'frisbee', 'skis', 'snowboard',
+    'sports ball', 'kite', 'baseball bat', 'baseball glove', 'skateboard',
+     'surfboard', 'tennis racket', 'bottle', 'wine glass', 'cup', 'fork',
+      'knife', 'spoon', 'bowl', 'banana', 'apple', 'sandwich', 'orange',
+       'broccoli', 'carrot', 'hot dog', 'pizza', 'donut', 'cake', 'chair',
+        'couch', 'potted plant', 'bed', 'dining table', 'toilet', 'tv',
+         'laptop', 'mouse', 'remote', 'keyboard', 'cell phone', 'microwave',
+          'oven', 'toaster', 'sink', 'refrigerator', 'book', 'clock', 'vase',
+           'scissors', 'teddy bear', 'hair drier', 'toothbrush')
 
-NETS = {'vgg16': ('vgg16_faster_rcnn_iter_100.ckpt', 'vgg16_faster_rcnn_iter_40000.ckpt',),'res101': ('res101_faster_rcnn_iter_110000.ckpt',)}
+NETS = {'vgg16': ('vgg16_faster_rcnn_iter_40000.ckpt', 'vgg16_faster_rcnn_iter_40000.ckpt',),'res101': ('res101_faster_rcnn_iter_110000.ckpt',)}
 DATASETS= {'coco':('coco_2017_train',), 'pascal_voc': ('voc_2007_trainval',),'pascal_voc_0712': ('voc_2007_trainval+voc_2012_trainval',)}
 def vis_detections(im, class_name, dets, thresh=0.5):
     """Draw detected bounding boxes."""
@@ -139,8 +145,9 @@ if __name__ == '__main__':
         net = resnetv1(num_layers=101)
     else:
         raise NotImplementedError
-    net.create_architecture("TEST", 81,
-                          tag='default', anchor_scales=[8, 16, 32])
+    net.create_architecture("TEST", 81, tag='default',
+        anchor_scales=[4,8,16,32], anchor_ratios=[0.5,1,2])
+
     saver = tf.train.Saver()
     saver.restore(sess, tfmodel)
 

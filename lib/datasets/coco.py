@@ -92,8 +92,11 @@ class coco(imdb):
     """
     # Example image path for index=119993:
     #   images/train2014/COCO_train2014_000000119993.jpg
-    file_name = ('COCO_' + self._data_name + '_' +
-                 str(index).zfill(12) + '.jpg')
+    if "2014" in self._data_name:
+      file_name = ('COCO_' + self._data_name +
+                   '_' + str(index).zfill(12) + '.jpg')
+    else:
+      file_name = (str(index).zfill(12) + '.jpg')
     image_path = osp.join(self._data_path, 'images',
                           self._data_name, file_name)
     assert osp.exists(image_path), \
@@ -205,8 +208,11 @@ class coco(imdb):
   def _get_box_file(self, index):
     # first 14 chars / first 22 chars / all chars + .mat
     # COCO_val2014_0/COCO_val2014_000000447/COCO_val2014_000000447991.mat
-    file_name = ('COCO_' + self._data_name +
-                 '_' + str(index).zfill(12) + '.mat')
+    if "2014" in self._data_name:
+      file_name = ('COCO_' + self._data_name +
+                   '_' + str(index).zfill(12) + '.mat')
+    else:
+      file_name = (str(index).zfill(12) + '.mat')
     return osp.join(file_name[:14], file_name[:22], file_name)
 
   def _print_detection_eval_metrics(self, coco_eval):
